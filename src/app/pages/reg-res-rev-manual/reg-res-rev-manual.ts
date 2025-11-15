@@ -25,7 +25,6 @@ export class RegResRevManual implements OnInit {
   }
 
   abrirPantalla(): void {
-    this.
     this.mostrarESParaSeleccion();
   }
   
