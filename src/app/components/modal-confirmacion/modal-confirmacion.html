@@ -3,14 +3,15 @@
   <div class="modal-content">
     <div class="modal-header">
       <h5 class="modal-title">Confirmación de selección</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <button type="button" class="btn-close" (click)="onCancelar()" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-      <p>¿Estás seguro de querer seleccionar este evento sismico?</p>
+      <p>¿Estás seguro de querer seleccionar este evento sísmico?</p>
+      <p class="modal-warning"><small><strong>Nota:</strong> El evento sísmico se bloqueará para evitar selecciones duplicadas.</small></p>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirmar</button>
+      <button type="button" class="btn btn-secondary" (click)="onCancelar()">Cancelar</button>
+      <button type="button" class="btn btn-primary ms-3" (click)="onConfirmar()">Confirmar</button>
     </div>
   </div>
 </div>

@@ -45,6 +45,12 @@
     line-height: 1.5;
 }
 
+.modal-body .modal-warning {
+    margin-top: 1rem;
+    color: var(--color-primary);
+    font-style: italic;
+}
+
 .modal-footer {
     background-color: var(--color-white);
     border-top: 1px solid rgba(32, 32, 32, 0.1);

@@ -47,4 +47,16 @@
       </div>
     }
   </main>
+
+  <!-- Modal de confirmación -->
+  @if (mostrarModal) {
+    <div class="modal-backdrop" (click)="cancelarSeleccion()">
+      <div (click)="$event.stopPropagation()">
+        <app-modal-confirmacion 
+          (confirmar)="tomarSeleccionES(eventoSeleccionado!, true)"
+          (cancelar)="cancelarSeleccion()">
+        </app-modal-confirmacion>
+      </div>
+    </div>
+  }
 </div>

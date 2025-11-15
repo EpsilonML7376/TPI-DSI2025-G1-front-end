@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
 import { IEventoSismico } from '../../interfaces/IEventoSismico';
 import { ServiceES } from '../../service/service-es.service';
+import { ModalConfirmacion } from '../../components/modal-confirmacion/modal-confirmacion';
 
 @Component({
   selector: 'app-reg-res-rev-manual',
-  imports: [CommonModule],
+  imports: [CommonModule, ModalConfirmacion],
   templateUrl: './reg-res-rev-manual.html',
   styleUrl: './reg-res-rev-manual.css'
 })
 export class RegResRevManual implements OnInit {
 
   ESNoRevisados: IEventoSismico[] = []
+  mostrarModal: boolean = false;
+  eventoSeleccionado: IEventoSismico | null = null;
 
   constructor(
     private serviceES: ServiceES,
@@ -47,16 +50,38 @@ export class RegResRevManual implements OnInit {
     return `${evento.fechaHoraOcurrencia}-${evento.latitudEpicentro}-${evento.longitudEpicentro}-${index}`;
   }
 
-  tomarSeleccionES(evento: IEventoSismico): void {
-    // Convertir el evento a string para enviarlo al backend
-    const eventoString = this.eventoToString(evento);
-    this.serviceES.postSelectEvent(eventoString).subscribe({
-      next: (response) => {
-        console.log('Evento seleccionado:', response);
-        // Aquí se puede agregar navegación a otra pantalla si es necesario
-      },
-      error: (err) => console.error('Error al seleccionar evento:', err)
-    });
+  tomarSeleccionES(evento: IEventoSismico, confirmar: boolean = false): void {
+    if (!confirmar) {
+      // Primera llamada: guardar el evento y abrir el modal
+      this.eventoSeleccionado = evento;
+      this.mostrarModal = true;
+    } else {
+      // Segunda llamada: confirmar la selección
+      if (this.eventoSeleccionado) {
+        // Convertir el evento a string para enviarlo al backend
+        const eventoString = this.eventoToString(this.eventoSeleccionado);
+        this.serviceES.postSelectEvent(eventoString).subscribe({
+          next: (response) => {
+            console.log('Evento seleccionado:', response);
+            this.cerrarModal();
+            // ACA TENEMOS QUE AGREGAR LA NAVEGACIÓN A LA PESTAÑA SIGUIENTE
+          },
+          error: (err) => {
+            console.error('Error al seleccionar evento:', err);
+            this.cerrarModal();
+          }
+        });
+      }
+    }
+  }
+
+  cancelarSeleccion(): void {
+    this.cerrarModal();
+  }
+
+  cerrarModal(): void {
+    this.mostrarModal = false;
+    this.eventoSeleccionado = null;
   }
 
   formatFecha(fecha: Date | string | null | undefined): string {
