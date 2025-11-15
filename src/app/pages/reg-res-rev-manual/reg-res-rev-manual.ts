@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { IEventoSismico } from '../../interfaces/IEventoSismico';
 import { ServiceES } from '../../service/service-es.service';
 import { ModalConfirmacion } from '../../components/modal-confirmacion/modal-confirmacion';
-import { SharedDataService } from '../../service/shared-data.service';
 
 @Component({
   selector: 'app-reg-res-rev-manual',
@@ -25,8 +24,7 @@ export class RegResRevManual implements OnInit {
     private serviceES: ServiceES,
     private location: Location,
     private cdr: ChangeDetectorRef,
-    private router: Router,
-    private sharedData: SharedDataService
+    private router: Router
   ) {}
   
   ngOnInit(): void {
@@ -76,34 +74,27 @@ export class RegResRevManual implements OnInit {
         const eventoString = this.eventoToString(this.eventoSeleccionado);
         this.serviceES.postSelectEvent(eventoString).subscribe({
           next: (response: string[]) => {
-            console.log('Evento seleccionado:', response);
             // Extraer alcance, clasificacion y origen de la respuesta
             const [alcance, clasificacion, origenGeneracion] = response;
             
-            console.log('Datos extraídos:', { alcance, clasificacion, origenGeneracion });
-            console.log('Evento a navegar:', this.eventoSeleccionado);
+            // Preparar datos para navegación
+            const navigationData = {
+              evento: this.eventoSeleccionado,
+              alcance: alcance,
+              clasificacion: clasificacion,
+              origenGeneracion: origenGeneracion
+            };
             
-            // Guardar datos en el servicio compartido
-            if (this.eventoSeleccionado) {
-              this.sharedData.setEventoData(this.eventoSeleccionado, alcance, clasificacion, origenGeneracion);
-            }
-            
+            // Cerrar modal primero
             this.cerrarModal();
             
             // Navegar a la página de resultado de revisión con los datos
-            console.log('Navegando a resultado-revision...');
-            this.router.navigate(['/resultado-revision'], {
-              state: {
-                evento: this.eventoSeleccionado,
-                alcance: alcance,
-                clasificacion: clasificacion,
-                origenGeneracion: origenGeneracion
-              }
-            }).then(() => {
-              console.log('Navegación completada');
-            }).catch((err) => {
-              console.error('Error en navegación:', err);
-            });
+            // Usar setTimeout para asegurar que el modal se cierre antes de navegar
+            setTimeout(() => {
+              this.router.navigate(['/resultado-revision'], {
+                state: navigationData
+              });
+            }, 100);
           },
           error: (err) => {
             console.error('Error al seleccionar evento:', err);

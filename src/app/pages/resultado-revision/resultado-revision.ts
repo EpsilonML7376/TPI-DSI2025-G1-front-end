@@ -6,7 +6,6 @@ import { ServiceES } from '../../service/service-es.service';
 import { ModalCargandoMapa } from '../../components/modal-cargando-mapa/modal-cargando-mapa';
 import { ModalModificarES } from '../../components/modal-modificar-es/modal-modificar-es';
 import { ModalFeedback } from '../../components/modal-feedback/modal-feedback';
-import { SharedDataService } from '../../service/shared-data.service';
 
 @Component({
   selector: 'app-resultado-revision',
@@ -40,35 +39,12 @@ export class ResultadoRevision implements OnInit {
     private serviceES: ServiceES,
     private router: Router,
     private route: ActivatedRoute,
-    private sharedData: SharedDataService,
     private cdr: ChangeDetectorRef
   ) {}
   
   ngOnInit(): void {
-    // Intentar obtener datos del navigation state primero
-    const navigation = this.router.getCurrentNavigation();
-    const stateFromNavigation = navigation?.extras?.state;
-    const stateFromHistory = history.state;
-    
-    console.log('State de navegación:', stateFromNavigation);
-    console.log('State de history:', stateFromHistory);
-    
-    // Intentar obtener datos del servicio compartido
-    const sharedData = this.sharedData.getEventoData();
-    console.log('Datos del servicio compartido:', sharedData);
-    
-    // Priorizar: navigation state > history state > servicio compartido
-    let state: any = null;
-    if (stateFromNavigation && stateFromNavigation['evento']) {
-      state = stateFromNavigation;
-      console.log('Usando datos de navigation state');
-    } else if (stateFromHistory && stateFromHistory['evento']) {
-      state = stateFromHistory;
-      console.log('Usando datos de history state');
-    } else if (sharedData.evento) {
-      state = sharedData;
-      console.log('Usando datos del servicio compartido');
-    }
+    // Obtener datos del navigation state usando history.state
+    const state = history.state;
     
     if (state && state['evento']) {
       this.eventoSismico = state['evento'];
@@ -76,35 +52,20 @@ export class ResultadoRevision implements OnInit {
       this.clasificacion = state['clasificacion'] || '';
       this.origenGeneracion = state['origenGeneracion'] || '';
       
-      console.log('Datos asignados:', {
-        eventoSismico: this.eventoSismico,
-        alcance: this.alcance,
-        clasificacion: this.clasificacion,
-        origenGeneracion: this.origenGeneracion
-      });
+      // Ejecutar los métodos según el flujo
+      this.mostrarDatosEvento();
+      this.habilitarOpcVerMapa();
+      this.habilitarOpcModificarDatos();
+      this.pedirSeleccionResultadoEvento();
     } else {
-      console.warn('No se encontraron datos en ninguna fuente');
-    }
-    
-    // Verificar que tenemos los datos necesarios
-    if (!this.eventoSismico) {
-      console.error('No hay evento sísmico, redirigiendo de vuelta...');
       // Si no hay datos, redirigir de vuelta
       this.router.navigate(['/reg-res-rev-manual']);
-      return;
     }
-    
-    // Ejecutar los métodos según el flujo
-    this.mostrarDatosEvento();
-    this.habilitarOpcVerMapa();
-    this.habilitarOpcModificarDatos();
-    this.pedirSeleccionResultadoEvento();
   }
 
   mostrarDatosEvento(): void {
     // Este método se encarga de que los datos estén listos para renderizarse
     // La renderización real ocurre en el template
-    console.log('Mostrando datos del evento:', this.eventoSismico);
   }
 
   habilitarOpcVerMapa(): void {
@@ -148,12 +109,8 @@ export class ResultadoRevision implements OnInit {
     const eventoString = this.eventoToString(this.eventoSismico);
 
     // Llamar al servicio
-    console.log('Llamando a postSelectResult con:', { opcion, eventoString });
     this.serviceES.postSelectResult(opcion, eventoString).subscribe({
       next: (response: string) => {
-        console.log('Resultado registrado (next):', response);
-        console.log('Tipo de respuesta:', typeof response);
-        
         // Determinar mensaje según la opción
         let mensaje = '';
         switch(opcion) {
@@ -176,17 +133,8 @@ export class ResultadoRevision implements OnInit {
         this.feedbackTitulo = 'Operación Exitosa';
         this.mostrarModalFeedback = true;
         
-        console.log('Modal de feedback configurado:', {
-          mostrarModalFeedback: this.mostrarModalFeedback,
-          feedbackTipo: this.feedbackTipo,
-          feedbackMensaje: this.feedbackMensaje
-        });
-        
         // Forzar detección de cambios
         this.cdr.detectChanges();
-        
-        // Limpiar datos del servicio compartido
-        this.sharedData.clearEventoData();
       },
       error: (err) => {
         console.error('Error al registrar resultado:', err);
