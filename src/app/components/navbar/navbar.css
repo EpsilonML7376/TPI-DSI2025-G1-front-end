@@ -1,5 +1,5 @@
 .header {
-  background: linear-gradient(90deg, #F87528 0%, #FF9100 100%);
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-variant) 100%);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,16 +12,16 @@
 }
 
 .home-link {
-  color: white;
+  color: var(--color-white);
   text-decoration: none;
-  font-size: 1.2rem;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  transition: opacity 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
 }
 
 .home-link:hover {
-  opacity: 0.8;
+  transform: scale(1.06);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 .navbar-right {
@@ -36,22 +36,17 @@
 }
 
 .user-logo {
-  width: 45px;       /* ajustá según el tamaño que quieras */
-  height: 45px;
-  object-fit: cover; /* cubre el área sin distorsionar */
-  border-radius: 50%; /* hace la imagen circular */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  will-change: transform; /* optimiza la animación */
+  width: 2.2rem;
+  height: 2.2rem;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
-/* Efecto hover para la imagen de usuario: ligero escalado y sombra */
 .user-logo:hover,
 .user-logo:focus {
-  transform: scale(1.08);
+  transform: scale(1.06);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   cursor: pointer;
-  outline: none; /* si la imagen puede recibir foco por accesibilidad */
+  outline: none;
 }
-
-
-
