@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { IEventoSismico } from '../../interfaces/IEventoSismico';
 import { ServiceES } from '../../service/service-es.service';
@@ -22,7 +21,6 @@ export class RegResRevManual implements OnInit {
 
   constructor(
     private serviceES: ServiceES,
-    private location: Location,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}

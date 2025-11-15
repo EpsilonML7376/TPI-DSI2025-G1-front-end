@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { IEventoSismico } from '../../interfaces/IEventoSismico';
 import { ServiceES } from '../../service/service-es.service';
 import { ModalCargandoMapa } from '../../components/modal-cargando-mapa/modal-cargando-mapa';
@@ -21,6 +21,7 @@ export class ResultadoRevision implements OnInit {
   origenGeneracion: string = '';
   
   // Estados de habilitación
+  datosEventoVisibles: boolean = false;
   botonVerMapaHabilitado: boolean = false;
   botonModificarHabilitado: boolean = false;
   seccionResultadoVisible: boolean = false;
@@ -38,7 +39,6 @@ export class ResultadoRevision implements OnInit {
   constructor(
     private serviceES: ServiceES,
     private router: Router,
-    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
   
@@ -64,8 +64,8 @@ export class ResultadoRevision implements OnInit {
   }
 
   mostrarDatosEvento(): void {
-    // Este método se encarga de que los datos estén listos para renderizarse
-    // La renderización real ocurre en el template
+    // Este método habilita la visualización de los datos del evento
+    this.datosEventoVisibles = true;
   }
 
   habilitarOpcVerMapa(): void {
