@@ -1,5 +1,5 @@
 .reg-res-rev-manual-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -8,11 +8,9 @@
 
 .back-button {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
   z-index: 10;
   margin: 0;
-  padding: 0.75rem;
+  padding-top: 5rem;
 }
 
 .back-button .back-arrow {
@@ -22,7 +20,7 @@
 }
 
 .page-header {
-  padding: 2rem;
+  padding: 5rem;
   text-align: center;
 }
 
@@ -42,7 +40,7 @@
 
 .table-container {
   flex: 1;
-  padding: 2rem;
+  padding: 0rem 2rem 0rem 2rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -97,8 +95,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-message {
@@ -174,4 +177,3 @@
   align-items: center;
   z-index: 1000;
 }
-
