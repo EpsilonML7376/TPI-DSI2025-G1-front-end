@@ -9,7 +9,11 @@
   </header>
 
   <main class="table-container">
-    <table class="events-table" [hidden]="!mostrarTabla || ESNoRevisados.length === 0">
+    <div class="loading-state" [hidden]="!cargando">
+      <div class="spinner"></div>
+      <p class="loading-message">Cargando eventos sísmicos...</p>
+    </div>
+    <table class="events-table" [hidden]="cargando || !mostrarTabla || ESNoRevisados.length === 0">
       <thead>
         <tr>
           <th>Fecha Hora Ocurrencia</th>
@@ -39,7 +43,7 @@
         }
       </tbody>
     </table>
-    <div class="empty-state" [hidden]="mostrarTabla && ESNoRevisados.length > 0">
+    <div class="empty-state" [hidden]="cargando || (mostrarTabla && ESNoRevisados.length > 0)">
       <img src="assets/no-es.png" alt="No hay eventos sísmicos" class="empty-state-image">
       <p class="empty-state-message">Ops! parece que no hay ningún Evento Sísmico pendiente de revision</p>
     </div>

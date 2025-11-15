@@ -17,6 +17,7 @@ export class RegResRevManual implements OnInit {
   mostrarModal: boolean = false;
   eventoSeleccionado: IEventoSismico | null = null;
   mostrarTabla: boolean = false;
+  cargando: boolean = true;
 
   constructor(
     private serviceES: ServiceES,
@@ -37,9 +38,13 @@ export class RegResRevManual implements OnInit {
     this.serviceES.getESNoRevisados().subscribe({
         next: (data) => {
           this.ESNoRevisados = data || [];
+          this.cargando = false;
           this.cdr.detectChanges(); // Forzar la detección de cambios
         },
-        error: (err) => console.error('Error al obtener ES no revisados:', err)
+        error: (err) => {
+          console.error('Error al obtener ES no revisados:', err);
+          this.cargando = false;
+        }
       });
   }
   mostrarESParaSeleccion(): void {
