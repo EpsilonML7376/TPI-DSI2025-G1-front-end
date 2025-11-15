@@ -1,0 +1,112 @@
+<div class="resultado-revision-container">
+  <header class="page-header">
+    <h1 class="page-title">Registrar Resultado de Revisión Manual</h1>
+    <p class="page-subtitle">Registrar la confirmación, rechazo o derivación de un sismo registrado automáticamente.</p>
+  </header>
+
+  <!-- Datos del Evento -->
+  @if (eventoSismico) {
+    <section class="datos-evento-section">
+      <table class="datos-evento-table">
+        <thead>
+          <tr>
+            <th>Fecha Hora Ocurrencia</th>
+            <th>Latitud Epicentro</th>
+            <th>Latitud Hipocentro</th>
+            <th>Longitud Epicentro</th>
+            <th>Longitud Hipocentro</th>
+            <th>Valor Magnitud</th>
+            <th>Alcance</th>
+            <th>Clasificación</th>
+            <th>Origen de Generación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ formatFecha(eventoSismico.fechaHoraOcurrencia) }}</td>
+            <td>{{ eventoSismico.latitudEpicentro }}</td>
+            <td>{{ eventoSismico.latitudHipocentro }}</td>
+            <td>{{ eventoSismico.longitudEpicentro }}</td>
+            <td>{{ eventoSismico.longitudHipocentro }}</td>
+            <td>{{ eventoSismico.valorMagnitud }}</td>
+            <td>{{ alcance }}</td>
+            <td>{{ clasificacion }}</td>
+            <td>{{ origenGeneracion }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Botones Ver Mapa y Modificar Datos -->
+      <div class="botones-accion">
+        <button 
+          class="btn-accion btn-mapa" 
+          (click)="verMapa()" 
+          [disabled]="!botonVerMapaHabilitado">
+          <i class="bi bi-geo-alt-fill"></i> Ver Mapa
+        </button>
+        <button 
+          class="btn-accion btn-modificar" 
+          (click)="modificarDatos()" 
+          [disabled]="!botonModificarHabilitado">
+          <i class="bi bi-pencil-fill"></i> Modificar Datos de Evento Sísmico
+        </button>
+      </div>
+    </section>
+
+    <!-- Seleccione el resultado -->
+    @if (seccionResultadoVisible) {
+      <section class="seleccion-resultado-section">
+        <h2 class="seleccion-titulo">Seleccione el resultado</h2>
+        <div class="botones-resultado">
+          <button class="btn-resultado btn-confirmar" (click)="confirmarEvento()">
+            Confirmar Evento
+          </button>
+          <button class="btn-resultado btn-rechazar" (click)="rechazarEvento()">
+            Rechazar Evento
+          </button>
+        </div>
+        <div class="solicitar-experto">
+          <p class="texto-o">o</p>
+          <button class="btn-experto" (click)="solicitarRevisionExperto()">
+            Solicitar Revisión a Experto
+          </button>
+        </div>
+      </section>
+    }
+  }
+
+  <!-- Modal Ver Mapa -->
+  @if (mostrarModalMapa) {
+    <div class="modal-backdrop" (click)="cerrarModalMapa()">
+      <div class="modal-cargando" (click)="$event.stopPropagation()">
+        <app-modal-cargando-mapa></app-modal-cargando-mapa>
+      </div>
+    </div>
+  }
+
+  <!-- Modal Modificar Datos -->
+  @if (mostrarModalModificar) {
+    <div class="modal-backdrop" (click)="cerrarModalModificar()">
+      <div class="modal-cargando" (click)="$event.stopPropagation()">
+        <app-modal-modificar-es></app-modal-modificar-es>
+      </div>
+    </div>
+  }
+
+  <!-- Modal Feedback -->
+  @if (mostrarModalFeedback) {
+    <div class="modal-backdrop modal-feedback-backdrop" (click)="cerrarModalFeedback()">
+      <div class="modal-feedback-wrapper" (click)="$event.stopPropagation()">
+        <div class="modal-dialog modal-dialog-centered">
+          <app-modal-feedback
+            [tipo]="feedbackTipo"
+            [mensaje]="feedbackMensaje"
+            [titulo]="feedbackTitulo"
+            (cerrar)="cerrarModalFeedback()">
+          </app-modal-feedback>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

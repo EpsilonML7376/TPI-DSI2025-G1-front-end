@@ -1,9 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { IEventoSismico } from '../../interfaces/IEventoSismico';
 import { ServiceES } from '../../service/service-es.service';
 import { ModalConfirmacion } from '../../components/modal-confirmacion/modal-confirmacion';
+import { SharedDataService } from '../../service/shared-data.service';
 
 @Component({
   selector: 'app-reg-res-rev-manual',
@@ -22,7 +24,9 @@ export class RegResRevManual implements OnInit {
   constructor(
     private serviceES: ServiceES,
     private location: Location,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private sharedData: SharedDataService
   ) {}
   
   ngOnInit(): void {
@@ -51,9 +55,9 @@ export class RegResRevManual implements OnInit {
     this.mostrarTabla = true;
   }
   
-  // Navegar hacia atrás, esto no estaba presente en el analisis
+  // Navegar al home
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['/']);
   }
 
   trackByEvento(index: number, evento: IEventoSismico): string {
@@ -71,10 +75,35 @@ export class RegResRevManual implements OnInit {
         // Convertir el evento a string para enviarlo al backend
         const eventoString = this.eventoToString(this.eventoSeleccionado);
         this.serviceES.postSelectEvent(eventoString).subscribe({
-          next: (response) => {
+          next: (response: string[]) => {
             console.log('Evento seleccionado:', response);
+            // Extraer alcance, clasificacion y origen de la respuesta
+            const [alcance, clasificacion, origenGeneracion] = response;
+            
+            console.log('Datos extraídos:', { alcance, clasificacion, origenGeneracion });
+            console.log('Evento a navegar:', this.eventoSeleccionado);
+            
+            // Guardar datos en el servicio compartido
+            if (this.eventoSeleccionado) {
+              this.sharedData.setEventoData(this.eventoSeleccionado, alcance, clasificacion, origenGeneracion);
+            }
+            
             this.cerrarModal();
-            // ACA TENEMOS QUE AGREGAR LA NAVEGACIÓN A LA PESTAÑA SIGUIENTE
+            
+            // Navegar a la página de resultado de revisión con los datos
+            console.log('Navegando a resultado-revision...');
+            this.router.navigate(['/resultado-revision'], {
+              state: {
+                evento: this.eventoSeleccionado,
+                alcance: alcance,
+                clasificacion: clasificacion,
+                origenGeneracion: origenGeneracion
+              }
+            }).then(() => {
+              console.log('Navegación completada');
+            }).catch((err) => {
+              console.error('Error en navegación:', err);
+            });
           },
           error: (err) => {
             console.error('Error al seleccionar evento:', err);
@@ -122,11 +151,24 @@ export class RegResRevManual implements OnInit {
   }
 
   private eventoToString(evento: IEventoSismico): string {
-    const fechaStr = evento.fechaHoraOcurrencia instanceof Date 
-      ? evento.fechaHoraOcurrencia.toISOString() 
-      : new Date(evento.fechaHoraOcurrencia).toISOString();
+    // Formatear fecha sin .000Z, solo hasta los segundos
+    let fechaStr: string;
+    if (evento.fechaHoraOcurrencia instanceof Date) {
+      const date = evento.fechaHoraOcurrencia;
+      fechaStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    } else {
+      const date = new Date(evento.fechaHoraOcurrencia);
+      fechaStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    }
     
-    return `fechaHoraOcurrencia=${fechaStr}, latitudEpicentro=${evento.latitudEpicentro}, latitudHipocentro=${evento.latitudHipocentro}, longitudEpicentro=${evento.longitudEpicentro}, longitudHipocentro=${evento.longitudHipocentro}, valorMagnitud=${evento.valorMagnitud}`;
+    // Convertir puntos decimales a comas (formato europeo)
+    const latEpicentro = evento.latitudEpicentro.replace('.', ',');
+    const latHipocentro = evento.latitudHipocentro.replace('.', ',');
+    const lonEpicentro = evento.longitudEpicentro.replace('.', ',');
+    const lonHipocentro = evento.longitudHipocentro.replace('.', ',');
+    const magnitud = evento.valorMagnitud.replace('.', ',');
+    
+    return `fechaHoraOcurrencia=${fechaStr}, latitudEpicentro=${latEpicentro}, latitudHipocentro=${latHipocentro}, longitudEpicentro=${lonEpicentro}, longitudHipocentro=${lonHipocentro}, valorMagnitud=${magnitud}`;
   }
 
 }

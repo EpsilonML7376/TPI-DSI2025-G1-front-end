@@ -26,4 +26,8 @@ export class App {
     return this.currentUrl === '/' || this.currentUrl === '';
   }
 
+  shouldHideNavbar(): boolean {
+    return this.isHome() || this.currentUrl === '/resultado-revision';
+  }
+
 }

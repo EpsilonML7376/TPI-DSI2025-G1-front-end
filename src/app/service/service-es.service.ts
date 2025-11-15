@@ -41,15 +41,20 @@ export class ServiceES {
     );
   }
 
-  postSelectEvent(event: string): Observable<any> {
+  postSelectEvent(event: string): Observable<string[]> {
     const params = new HttpParams().set('evento', event);
-    return this.http.post(`${this.baseUrl}/seleccion-evento`, null, { params });
+    return this.http.post<string[]>(`${this.baseUrl}/seleccion-evento`, null, { params });
   }
 
-  postSelectResult(selection: string, evento: string): Observable<any> {
+  postSelectResult(selection: string, evento: string): Observable<string> {
     const params = new HttpParams()
         .set('seleccion', selection)
         .set('evento', evento);
-    return this.http.post(`${this.baseUrl}/seleccion-resultado`, null, { params });
+    // El backend devuelve un string con el mensaje de éxito o error
+    // Usamos responseType: 'text' para manejar respuestas de texto plano
+    return this.http.post(`${this.baseUrl}/seleccion-resultado`, null, { 
+      params,
+      responseType: 'text'
+    }) as Observable<string>;
   }
 }

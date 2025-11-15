@@ -1,0 +1,16 @@
+<div class="modal-content">
+  <div class="modal-header" [ngClass]="{'header-exito': tipo === 'exito', 'header-error': tipo === 'error'}">
+    <h5 class="modal-title">
+      <i [class]="getIcono()" [ngClass]="{'icono-exito': tipo === 'exito', 'icono-error': tipo === 'error'}"></i>
+      {{ getTitulo() }}
+    </h5>
+    <button type="button" class="btn-close" (click)="onCerrar()" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <p>{{ mensaje }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onCerrar()">OK</button>
+  </div>
+</div>
+
