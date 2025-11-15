@@ -22,7 +22,7 @@ body {
     --color-white: #F9F9F9;
 
     /* Accents */
-    --color-primary: #F87258;
+    --color-primary: #F87528;
     --color-primary-variant: #FF9100;
     --color-secondary: #FFC173;
     --color-secondary-variant: #FFB14A;
@@ -49,4 +49,109 @@ label,
 input,
 button {
     font-family: var(--font-body);
+}
+
+/* Back button styles */
+.back-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.back-button:hover {
+    transform: translateX(-4px);
+}
+
+.back-arrow {
+    font-size: 2rem;
+    color: var(--color-primary);
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* Table styles */
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.events-table thead {
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-variant) 100%);
+}
+
+.events-table th {
+    padding: 1rem;
+    text-align: left;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+}
+
+.events-table tbody tr {
+    border-bottom: 1px solid #e5e5e5;
+    transition: background-color 0.2s ease;
+}
+
+.events-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.events-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.events-table td {
+    padding: 1rem;
+    color: var(--color-black);
+    font-size: 0.95rem;
+}
+
+/* Action button styles */
+.select-event-button {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.select-event-button:hover {
+    background-color: var(--color-primary-variant);
+    transform: translateY(-2px);
+}
+
+.select-event-button:active {
+    transform: translateY(0);
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .events-table {
+        font-size: 0.85rem;
+    }
+
+    .events-table th,
+    .events-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .select-event-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
 }

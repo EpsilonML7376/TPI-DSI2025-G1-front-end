@@ -10,15 +10,15 @@ import { Router } from '@angular/router';
 export class Home {
   constructor(private router: Router) {}
 
-  public navigateToRegResRevManual(): void {
+  public opcRegResultadoES(): void {
     this.router.navigate(['/reg-res-rev-manual']);
   }
 
-  public navigateToCierreOrden(): void {
+  public opcCierreOrden(): void {
     console.log('Cierre de orden de inspección - fuera del scope de este proyecto');
   }
 
-  public navigateToGenerarInforme(): void {
+  public opcGenerarInforme(): void {
     console.log('Generar informe de gestión de sismos - fuera del scope de este proyecto');
   }
 }
