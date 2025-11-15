@@ -1,1 +1,29 @@
-<p>home works!</p>
+<div class="home-container">
+  <header class="welcome-header">
+    <h1>¡Bienvenido!</h1>
+  </header>
+  
+  <main class="main-content">
+    <p class="question">¿Qué quieres hacer hoy?</p>
+    
+    <div class="cards-container">
+      <div class="card" (click)="navigateToRegResRevManual()">
+        <h2 class="card-title">
+          <span class="card-title-main">Registrar Resultado de Revisión Manual</span>
+        </h2>
+        <p class="card-description">
+          Registrar la aprobación, rechazo o derivación de un sismo registrado automáticamente.
+        </p>
+      </div>
+      
+      <div class="card" (click)="navigateToCierreOrden()">
+        <h2 class="card-title">
+          <span class="card-title-main">Dar cierre a orden de inspección de ES</span>
+        </h2>
+        <p class="card-description">
+          Registrar el cierre de orden de inspección para una estación sismológica.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>

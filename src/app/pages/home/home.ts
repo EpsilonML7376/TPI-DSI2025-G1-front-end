@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -7,5 +8,13 @@ import { Component } from '@angular/core';
   styleUrl: './home.css'
 })
 export class Home {
+  constructor(private router: Router) {}
 
+  public navigateToRegResRevManual(): void {
+    this.router.navigate(['/reg-res-rev-manual']);
+  }
+
+  public navigateToCierreOrden(): void {
+    console.log('Cierre de orden de inspección - fuera del scope de este proyecto');
+  }
 }
