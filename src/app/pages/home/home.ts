@@ -17,4 +17,8 @@ export class Home {
   public navigateToCierreOrden(): void {
     console.log('Cierre de orden de inspección - fuera del scope de este proyecto');
   }
+
+  public navigateToGenerarInforme(): void {
+    console.log('Generar informe de gestión de sismos - fuera del scope de este proyecto');
+  }
 }
