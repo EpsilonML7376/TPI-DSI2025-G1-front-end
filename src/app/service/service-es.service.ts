@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IEventoSismico } from '../interfaces/IEventoSismico';
 import { map } from 'rxjs/operators';
@@ -41,11 +41,15 @@ export class ServiceES {
     );
   }
 
-  postSelectEvent(event:string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/seleccion-evento`, { event })
+  postSelectEvent(event: string): Observable<any> {
+    const params = new HttpParams().set('evento', event);
+    return this.http.post(`${this.baseUrl}/seleccion-evento`, null, { params });
   }
 
-  postSelectResult(selection:string, evento: string): Observable<any> {
-      return this.http.post(`${this.baseUrl}/seleccion-resultado`, { selection, evento })
-    }
+  postSelectResult(selection: string, evento: string): Observable<any> {
+    const params = new HttpParams()
+        .set('seleccion', selection)
+        .set('evento', evento);
+    return this.http.post(`${this.baseUrl}/seleccion-resultado`, null, { params });
+  }
 }
