@@ -9,42 +9,39 @@
   </header>
 
   <main class="table-container">
-    @if (ESNoRevisados.length > 0) {
-      <table class="events-table">
-        <thead>
+    <table class="events-table" [hidden]="!mostrarTabla || ESNoRevisados.length === 0">
+      <thead>
+        <tr>
+          <th>Fecha Hora Ocurrencia</th>
+          <th>Latitud Epicentro</th>
+          <th>Latitud Hipocentro</th>
+          <th>Longitud Epicentro</th>
+          <th>Longitud Hipocentro</th>
+          <th>Valor Magnitud</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (evento of ESNoRevisados; track trackByEvento($index, evento)) {
           <tr>
-            <th>Fecha Hora Ocurrencia</th>
-            <th>Latitud Epicentro</th>
-            <th>Latitud Hipocentro</th>
-            <th>Longitud Epicentro</th>
-            <th>Longitud Hipocentro</th>
-            <th>Valor Magnitud</th>
-            <th>Acciones</th>
+            <td>{{ formatFecha(evento.fechaHoraOcurrencia) }}</td>
+            <td>{{ evento.latitudEpicentro || 'N/A' }}</td>
+            <td>{{ evento.latitudHipocentro || 'N/A' }}</td>
+            <td>{{ evento.longitudEpicentro || 'N/A' }}</td>
+            <td>{{ evento.longitudHipocentro || 'N/A' }}</td>
+            <td>{{ evento.valorMagnitud || 'N/A' }}</td>
+            <td>
+              <button class="select-event-button" (click)="tomarSeleccionES(evento)">
+                Seleccionar evento
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          @for (evento of ESNoRevisados; track trackByEvento($index, evento)) {
-            <tr>
-              <td>{{ formatFecha(evento.fechaHoraOcurrencia) }}</td>
-              <td>{{ evento.latitudEpicentro || 'N/A' }}</td>
-              <td>{{ evento.latitudHipocentro || 'N/A' }}</td>
-              <td>{{ evento.longitudEpicentro || 'N/A' }}</td>
-              <td>{{ evento.longitudHipocentro || 'N/A' }}</td>
-              <td>{{ evento.valorMagnitud || 'N/A' }}</td>
-              <td>
-                <button class="select-event-button" (click)="tomarSeleccionES(evento)">
-                  Seleccionar evento
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    } @else {
-      <div class="empty-state">
-        <img src="assets/no-es.png" alt="No hay eventos sísmicos" class="empty-state-image">
-        <p class="empty-state-message">Ops! parece que no hay ningún Evento Sísmico pendiente de revision</p>
-      </div>
-    }
+        }
+      </tbody>
+    </table>
+    <div class="empty-state" [hidden]="mostrarTabla && ESNoRevisados.length > 0">
+      <img src="assets/no-es.png" alt="No hay eventos sísmicos" class="empty-state-image">
+      <p class="empty-state-message">Ops! parece que no hay ningún Evento Sísmico pendiente de revision</p>
+    </div>
   </main>
 </div>
