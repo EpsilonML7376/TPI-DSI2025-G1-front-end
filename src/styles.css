@@ -25,6 +25,7 @@ body {
     --color-primary: #F87258;
     --color-primary-variant: #FF9100;
     --color-secondary: #FFC173;
+    --color-secondary-variant: #FFB14A;
 
     /* Typography */
     --font-title: 'Montserrat', sans-serif;

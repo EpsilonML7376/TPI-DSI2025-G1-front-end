@@ -5,7 +5,7 @@
 }
 
 .welcome-header {
-  background: linear-gradient(90deg, #F87528 0%, #FF9100 100%);
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-variant) 100%);
   padding: 4rem 2rem;
   display: flex;
   justify-content: center;
@@ -14,17 +14,17 @@
 }
 
 .welcome-header h1 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-title);
   font-size: 5.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--color-white);
   margin: 0;
   text-align: center;
 }
 
 .main-content {
   flex: 1;
-  background: white;
+  background: var(--color-white);
   padding: 3rem 2rem;
   display: flex;
   flex-direction: column;
@@ -32,10 +32,11 @@
 }
 
 .question {
-  font-family: 'Lato', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.5rem;
-  color: #202020;
+  color: var(--color-black);
   margin-bottom: 2.5rem;
+  margin-top: 1.5rem;
   text-align: center;
 }
 
@@ -49,38 +50,40 @@
 }
 
 .card {
-  background-color: #FFC173;
+  background-color: var(--color-secondary);
   border-radius: 12px;
+  border: none;
   padding: 2rem;
   flex: 1;
   min-width: 300px;
   max-width: 500px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
+  background-color: var(--color-secondary-variant);
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card-title {
-  font-family: 'Lato', sans-serif;
+  font-family: var(--font-body);
   margin: 0 0 1rem 0;
 }
 
 .card-title-main {
   font-size: 2rem;
   font-weight: 700;
-  color: #202020;
+  color: var(--color-black);
   display: block;
 }
 
 .card-description {
-  font-family: 'Lato', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
-  color: #202020;
+  color: var(--color-black);
   margin: 0;
   line-height: 1.5;
 }
@@ -118,4 +121,3 @@
     font-size: 1.75rem;
   }
 }
-
