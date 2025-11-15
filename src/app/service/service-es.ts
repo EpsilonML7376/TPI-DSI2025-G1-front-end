@@ -14,7 +14,7 @@ export class ServiceES {
   }
 
   postSelectEvent(event:string): Observable<any> {
-    return this.http.post('http://localhost:8080/seleccion-resultado', { event })
+    return this.http.post('http://localhost:8080/seleccion-evento', { event })
   }
 
   postSelectResult(selection:string, evento: string): Observable<any> {
