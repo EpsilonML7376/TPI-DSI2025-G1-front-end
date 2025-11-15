@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-modal-confirmacion',
@@ -7,6 +7,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrl: './modal-confirmacion.css',
 })
 export class ModalConfirmacion {
+  @Input() titulo: string = 'Confirmar selección';
+  @Input() mensaje: string = '¿Estás seguro de querer realizar esta acción?';
+  @Input() mensajeAdicional: string = '';
   @Output() confirmar = new EventEmitter<void>();
   @Output() cancelar = new EventEmitter<void>();
 

@@ -54,6 +54,9 @@
     <div class="modal-backdrop" (click)="cancelarSeleccion()">
       <div (click)="$event.stopPropagation()">
         <app-modal-confirmacion 
+          titulo="Confirmar selección"
+          mensaje="¿Estás seguro de querer seleccionar este evento sísmico?"
+          mensajeAdicional="Nota: El evento sísmico se bloqueará para evitar selecciones duplicadas."
           (confirmar)="tomarSeleccionES(eventoSeleccionado!, true)"
           (cancelar)="cancelarSeleccion()">
         </app-modal-confirmacion>

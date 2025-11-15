@@ -6,10 +6,11 @@ import { ServiceES } from '../../service/service-es.service';
 import { ModalCargandoMapa } from '../../components/modal-cargando-mapa/modal-cargando-mapa';
 import { ModalModificarES } from '../../components/modal-modificar-es/modal-modificar-es';
 import { ModalFeedback } from '../../components/modal-feedback/modal-feedback';
+import { ModalConfirmacion } from '../../components/modal-confirmacion/modal-confirmacion';
 
 @Component({
   selector: 'app-resultado-revision',
-  imports: [CommonModule, ModalCargandoMapa, ModalModificarES, ModalFeedback],
+  imports: [CommonModule, ModalCargandoMapa, ModalModificarES, ModalFeedback, ModalConfirmacion],
   templateUrl: './resultado-revision.html',
   styleUrl: './resultado-revision.css'
 })
@@ -30,11 +31,18 @@ export class ResultadoRevision implements OnInit {
   mostrarModalMapa: boolean = false;
   mostrarModalModificar: boolean = false;
   mostrarModalFeedback: boolean = false;
+  mostrarModalConfirmacion: boolean = false;
   
   // Datos del modal de feedback
   feedbackTipo: 'exito' | 'error' = 'exito';
   feedbackMensaje: string = '';
   feedbackTitulo: string = '';
+  
+  // Datos del modal de confirmación
+  accionConfirmar: string = '';
+  confirmacionTitulo: string = '';
+  confirmacionMensaje: string = '';
+  procesandoAccion: boolean = false;
 
   constructor(
     private serviceES: ServiceES,
@@ -127,7 +135,9 @@ export class ResultadoRevision implements OnInit {
             mensaje = response || `El evento ha sido ${opcion.toLowerCase()} exitosamente.`;
         }
         
-        // Mostrar modal de éxito
+        // Cerrar modal de confirmación y mostrar modal de éxito
+        this.procesandoAccion = false;
+        this.mostrarModalConfirmacion = false;
         this.feedbackTipo = 'exito';
         this.feedbackMensaje = mensaje;
         this.feedbackTitulo = 'Operación Exitosa';
@@ -152,7 +162,9 @@ export class ResultadoRevision implements OnInit {
           mensajeError = `Error: ${err.message}`;
         }
         
-        // Mostrar modal de error
+        // Cerrar modal de confirmación y mostrar modal de error
+        this.procesandoAccion = false;
+        this.mostrarModalConfirmacion = false;
         this.feedbackTipo = 'error';
         this.feedbackMensaje = mensajeError;
         this.feedbackTitulo = 'Error';
@@ -171,15 +183,37 @@ export class ResultadoRevision implements OnInit {
   }
 
   confirmarEvento(): void {
-    this.tomarSeleccionResultado('Confirmado');
+    this.accionConfirmar = 'Confirmado';
+    this.confirmacionTitulo = 'Confirmar Evento';
+    this.confirmacionMensaje = '¿Estás seguro de que deseas confirmar este evento sísmico?';
+    this.mostrarModalConfirmacion = true;
   }
 
   rechazarEvento(): void {
-    this.tomarSeleccionResultado('Rechazado');
+    this.accionConfirmar = 'Rechazado';
+    this.confirmacionTitulo = 'Rechazar Evento';
+    this.confirmacionMensaje = '¿Estás seguro de que deseas rechazar este evento sísmico?';
+    this.mostrarModalConfirmacion = true;
   }
 
   solicitarRevisionExperto(): void {
-    this.tomarSeleccionResultado('Derivado a Experto');
+    this.accionConfirmar = 'Derivado a Experto';
+    this.confirmacionTitulo = 'Solicitar Revisión a Experto';
+    this.confirmacionMensaje = '¿Estás seguro de que deseas solicitar la revisión de este evento sísmico a un experto?';
+    this.mostrarModalConfirmacion = true;
+  }
+
+  onConfirmarAccion(): void {
+    // No cerrar el modal de confirmación todavía, se cerrará cuando se muestre el modal de feedback
+    // Activar indicador de carga
+    this.procesandoAccion = true;
+    this.tomarSeleccionResultado(this.accionConfirmar);
+  }
+
+  onCancelarAccion(): void {
+    this.procesandoAccion = false;
+    this.mostrarModalConfirmacion = false;
+    this.accionConfirmar = '';
   }
 
   formatFecha(fecha: Date | string | null | undefined): string {

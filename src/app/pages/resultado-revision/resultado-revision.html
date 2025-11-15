@@ -108,5 +108,30 @@
       </div>
     </div>
   }
+
+  <!-- Modal Confirmación -->
+  @if (mostrarModalConfirmacion) {
+    <div class="modal-backdrop" (click)="onCancelarAccion()" [class.procesando]="procesandoAccion">
+      <div class="modal-feedback-wrapper" (click)="$event.stopPropagation()">
+        <div class="modal-dialog modal-dialog-centered">
+          @if (procesandoAccion) {
+            <div class="modal-content">
+              <div class="modal-body" style="padding: 2rem; text-align: center;">
+                <div class="spinner"></div>
+                <p style="margin: 0; color: var(--color-black); font-family: var(--font-body);">Procesando solicitud...</p>
+              </div>
+            </div>
+          } @else {
+            <app-modal-confirmacion
+              [titulo]="confirmacionTitulo"
+              [mensaje]="confirmacionMensaje"
+              (confirmar)="onConfirmarAccion()"
+              (cancelar)="onCancelarAccion()">
+            </app-modal-confirmacion>
+          }
+        </div>
+      </div>
+    </div>
+  }
 </div>
 
