@@ -1,12 +1,29 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { Navbar } from './components/navbar/navbar';
+import { CommonModule } from '@angular/common';   // 👈 Importá CommonModule
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, Navbar, CommonModule], // 👈 Agregalo acá
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 export class App {
-  protected title = 'TPI-DSI2025-G1-front-end';
+  currentUrl: string = '';
+
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.currentUrl = event.url;
+      });
+  }
+
+  isHome(): boolean {
+    return this.currentUrl === '/' || this.currentUrl === '';
+  }
+
 }
