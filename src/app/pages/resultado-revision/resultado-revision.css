@@ -106,6 +106,13 @@
   background-color: var(--color-white);
 }
 
+/* Ancho específico para la columna "Fecha Hora Ocurrencia" */
+.datos-evento-table td:first-child,
+.datos-evento-table th:first-child {
+  min-width: 150px;
+  width: 15%;
+}
+
 /* Botones de acción */
 .botones-accion {
   display: flex;
