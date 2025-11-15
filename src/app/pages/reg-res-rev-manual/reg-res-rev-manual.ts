@@ -17,10 +17,11 @@ export class RegResRevManual {
   ngOnInit(): void {
 
     this.serviceES.getESNoRevisados().subscribe({
-      next: (data) => this.ESNoRevisados = data,
+      next: (data) => this.ESNoRevisados = data,  
       // Manejo de errores
       error: (err) => console.error('Error al obtener ES no revisados:', err)
     });
+
   }
 
 }

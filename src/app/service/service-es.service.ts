@@ -17,15 +17,24 @@ export class ServiceES {
     return this.http.get<string[]>(`${this.baseUrl}/norevisados`).pipe(
       map((data: string[]) =>
         data.map((item: string) => {
-          const [fechaHora, latEpi, latHip, longEpi, longHip, magnitud] = item.split(',');
+          // Dividimos por ", " para obtener cada par clave=valor
+          const pairs = item.split(', ');
+          
+          // Creamos un objeto para almacenar los valores parseados
+          const parsed: Record<string, string> = {};
+          
+          pairs.forEach(pair => {
+            const [key, value] = pair.split('=');
+            parsed[key] = value;
+          });
 
           return {
-            fechaHoraOcurrencia: new Date(fechaHora),
-            latitudEpicentro: latEpi,
-            latitudHipocentro: latHip,
-            longitudEpicentro: longEpi,
-            longitudHipocentro: longHip,
-            valorMagnitud: magnitud
+            fechaHoraOcurrencia: new Date(parsed['fechaHoraOcurrencia']),
+            latitudEpicentro: parsed['latitudEpicentro'],
+            latitudHipocentro: parsed['latitudHipocentro'],
+            longitudEpicentro: parsed['longitudEpicentro'],
+            longitudHipocentro: parsed['longitudHipocentro'],
+            valorMagnitud: parsed['valorMagnitud']
           } as IEventoSismico;
         })
       )
