@@ -4,7 +4,7 @@ Frontend del Proyecto Práctico de Aplicación Integrador (TPI) de la carrera In
 
 ## 📋 Información Académica
 
-- **Proyecto**: Proyecto Práctico de Aplicación Integrador (TPI)
+- **Proyecto**: Proyecto Práctico de Aplicación Integrador (PPAI)
 - **Carrera**: Ingeniería en Sistemas de Información
 - **Materia**: Diseño de Sistemas
 - **Universidad**: Universidad Tecnológica Nacional - Facultad Regional Villa María
