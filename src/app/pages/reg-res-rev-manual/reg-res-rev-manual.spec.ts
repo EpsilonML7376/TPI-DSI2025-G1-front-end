@@ -1,3 +1,4 @@
+// Prueba básica: verifica que el componente RegResRevManual se cree correctamente
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegResRevManual } from './reg-res-rev-manual';

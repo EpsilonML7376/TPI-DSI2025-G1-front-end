@@ -216,19 +216,24 @@ export class ResultadoRevision implements OnInit {
     this.accionConfirmar = '';
   }
 
+  // Formatea una fecha a "YYYY-MM-DD | HH:mm:ss" (hora local)
+  // Acepta Date o string; devuelve 'N/A'/'Fecha inválida' en casos no válidos
   formatFecha(fecha: Date | string | null | undefined): string {
     if (!fecha) {
       return 'N/A';
     }
     
     try {
+      // Normaliza a instancia Date (si viene como string)
       const date = fecha instanceof Date ? fecha : new Date(fecha);
       
+      // Valida que la fecha sea válida
       if (isNaN(date.getTime())) {
         console.warn('Fecha inválida:', fecha);
         return 'Fecha inválida';
       }
       
+      // Construye componentes con padding a 2 dígitos
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
@@ -236,6 +241,7 @@ export class ResultadoRevision implements OnInit {
       const minutes = String(date.getMinutes()).padStart(2, '0');
       const seconds = String(date.getSeconds()).padStart(2, '0');
       
+      // Resultado final: YYYY-MM-DD | HH:mm:ss
       return `${year}-${month}-${day} | ${hours}:${minutes}:${seconds}`;
     } catch (error) {
       console.error('Error al formatear fecha:', error, fecha);
@@ -243,8 +249,10 @@ export class ResultadoRevision implements OnInit {
     }
   }
 
+  // Serializa el evento al formato de texto que espera el backend:
+  // "clave=valor, ..." con fecha sin milisegundos ni zona y decimales con coma
   private eventoToString(evento: IEventoSismico): string {
-    // Formatear fecha sin .000Z, solo hasta los segundos
+    // Formatea fecha sin milisegundos ni sufijo "Z" (solo hasta los segundos)
     let fechaStr: string;
     if (evento.fechaHoraOcurrencia instanceof Date) {
       const date = evento.fechaHoraOcurrencia;
@@ -254,13 +262,14 @@ export class ResultadoRevision implements OnInit {
       fechaStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
     }
     
-    // Convertir puntos decimales a comas (formato europeo)
+    // Cambia punto decimal por coma (ej.: "-34.6" -> "-34,6")
     const latEpicentro = evento.latitudEpicentro.replace('.', ',');
     const latHipocentro = evento.latitudHipocentro.replace('.', ',');
     const lonEpicentro = evento.longitudEpicentro.replace('.', ',');
     const lonHipocentro = evento.longitudHipocentro.replace('.', ',');
     const magnitud = evento.valorMagnitud.replace('.', ',');
     
+    // Orden y nombres de claves deben coincidir con lo que espera el backend
     return `fechaHoraOcurrencia=${fechaStr}, latitudEpicentro=${latEpicentro}, latitudHipocentro=${latHipocentro}, longitudEpicentro=${lonEpicentro}, longitudHipocentro=${lonHipocentro}, valorMagnitud=${magnitud}`;
   }
 

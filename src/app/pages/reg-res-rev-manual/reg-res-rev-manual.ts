@@ -56,6 +56,7 @@ export class RegResRevManual implements OnInit {
     this.router.navigate(['/']);
   }
 
+  // trackBy para optimizar For: compone una clave estable y concisa
   trackByEvento(index: number, evento: IEventoSismico): string {
     return `${evento.fechaHoraOcurrencia}-${evento.latitudEpicentro}-${evento.longitudEpicentro}-${index}`;
   }
@@ -66,7 +67,7 @@ export class RegResRevManual implements OnInit {
       this.eventoSeleccionado = evento;
       this.mostrarModal = true;
     } else {
-      // Segunda llamada: confirmar la selección
+      // Segunda fase: confirma selección y navega con los datos retornados
       if (this.eventoSeleccionado) {
         // Convertir el evento a string para enviarlo al backend
         const eventoString = this.eventoToString(this.eventoSeleccionado);
@@ -112,19 +113,24 @@ export class RegResRevManual implements OnInit {
     this.eventoSeleccionado = null;
   }
 
+  // Formatea una fecha a "YYYY-MM-DD | HH:mm:ss" (hora local)
+  // Acepta Date o string; devuelve 'N/A' o 'Fecha inválida' cuando corresponde
   formatFecha(fecha: Date | string | null | undefined): string {
     if (!fecha) {
       return 'N/A';
     }
     
     try {
+      // Normaliza a instancia Date si llega como string
       const date = fecha instanceof Date ? fecha : new Date(fecha);
       
+      // Valida fecha válida
       if (isNaN(date.getTime())) {
         console.warn('Fecha inválida:', fecha);
         return 'Fecha inválida';
       }
       
+      // Construye partes con padding a 2 dígitos
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
@@ -132,6 +138,7 @@ export class RegResRevManual implements OnInit {
       const minutes = String(date.getMinutes()).padStart(2, '0');
       const seconds = String(date.getSeconds()).padStart(2, '0');
       
+      // Ejemplo final: 2025-11-16 | 14:35:09
       return `${year}-${month}-${day} | ${hours}:${minutes}:${seconds}`;
     } catch (error) {
       console.error('Error al formatear fecha:', error, fecha);
@@ -139,6 +146,9 @@ export class RegResRevManual implements OnInit {
     }
   }
 
+  // Serializa el evento al formato "clave=valor, ..." requerido por el backend
+  // - Fecha: sin milisegundos ni sufijo "Z", hasta segundos (HH:mm:ss)
+  // - Números decimales: punto -> coma (formato europeo)
   private eventoToString(evento: IEventoSismico): string {
     // Formatear fecha sin .000Z, solo hasta los segundos
     let fechaStr: string;
@@ -157,6 +167,7 @@ export class RegResRevManual implements OnInit {
     const lonHipocentro = evento.longitudHipocentro.replace('.', ',');
     const magnitud = evento.valorMagnitud.replace('.', ',');
     
+    // Mantener el orden y nombres de claves esperados por el backend
     return `fechaHoraOcurrencia=${fechaStr}, latitudEpicentro=${latEpicentro}, latitudHipocentro=${latHipocentro}, longitudEpicentro=${lonEpicentro}, longitudHipocentro=${lonHipocentro}, valorMagnitud=${magnitud}`;
   }
 
